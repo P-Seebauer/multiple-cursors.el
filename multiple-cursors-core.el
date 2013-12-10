@@ -292,6 +292,14 @@ cursor with updated info."
   (1+ (count-if 'mc/fake-cursor-p
                 (overlays-in (point-min) (point-max)))))
 
+(defvar mc/mc-mode-temporarily-disabled nil
+  "This variable can be used to temporarily disable the multiple cursor mode")
+
+(defun mc/toggle-temporarily-disable-mc-mode ()
+  "Toggles the variable mc/mc-mode-temporarily-disabled"
+  (setq mc/mc-mode-temporarily-disabled (not mc/mc-mode-temporarily-disabled))
+)
+
 (defvar mc--this-command nil
   "Used to store the original command being run.")
 (make-variable-buffer-local 'mc--this-command)
@@ -334,7 +342,9 @@ it will prompt for the proper action and then save that preference.
 
 Some commands are so unsupported that they are even prevented for
 the original cursor, to inform about the lack of support."
-  (unless mc--executing-command-for-fake-cursor
+  (unless (or mc--executing-command-for-fake-cursor 
+	      mc/mc-mode-temporarily-disabled
+	      )
 
     (if (eq 1 (mc/num-cursors)) ;; no fake cursors? disable mc-mode
         (multiple-cursors-mode 0)
@@ -457,6 +467,7 @@ They are temporarily disabled when multiple-cursors are active.")
 (define-minor-mode multiple-cursors-mode
   "Mode while multiple cursors are active."
   nil mc/mode-line mc/keymap
+  (setq mc/mc-mode-temporarily-disabled nil)
   (if multiple-cursors-mode
       (progn
         (mc/temporarily-disable-unsupported-minor-modes)
