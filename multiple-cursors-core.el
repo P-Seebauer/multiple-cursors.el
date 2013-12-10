@@ -297,6 +297,7 @@ cursor with updated info."
 
 (defun mc/toggle-temporarily-disable-mc-mode ()
   "Toggles the variable mc/mc-mode-temporarily-disabled"
+  (interactive)
   (setq mc/mc-mode-temporarily-disabled (not mc/mc-mode-temporarily-disabled))
 )
 
