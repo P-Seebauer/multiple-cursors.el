@@ -295,10 +295,15 @@ cursor with updated info."
 (defvar mc/mc-mode-temporarily-disabled nil
   "This variable can be used to temporarily disable the multiple cursor mode")
 
-(defun mc/toggle-temporarily-disable-mc-mode ()
-  "Toggles the variable mc/mc-mode-temporarily-disabled"
-  (interactive)
-  (setq mc/mc-mode-temporarily-disabled (not mc/mc-mode-temporarily-disabled))
+(defun mc/toggle-temporarily-disable-mc-mode (&optional arg)
+  "Toggles the variable mc/mc-mode-temporarily-disabled if arg is 1 or not supplied
+If `arg' is greater than 1 arg is changed to t else to ()"
+  (interactive "p")
+  (if (and arg (not (eq arg 1)))
+      (setq mc/mc-mode-temporarily-disabled (> arg 1))
+    (setq mc/mc-mode-temporarily-disabled 
+	  (not mc/mc-mode-temporarily-disabled))
+    )
 )
 
 (defvar mc--this-command nil
