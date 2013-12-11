@@ -294,17 +294,7 @@ cursor with updated info."
 
 (defvar mc/mc-mode-temporarily-disabled nil
   "This variable can be used to temporarily disable the multiple cursor mode")
-
-(defun mc/toggle-temporarily-disable-mc-mode (&optional arg)
-  "Toggles the variable mc/mc-mode-temporarily-disabled if arg is 1 or not supplied
-If `arg' is greater than 1 arg is changed to t else to ()"
-  (interactive "p")
-  (if (and arg (not (eq arg 1)))
-      (setq mc/mc-mode-temporarily-disabled (> arg 1))
-    (setq mc/mc-mode-temporarily-disabled 
-	  (not mc/mc-mode-temporarily-disabled))
-    )
-)
+(make-variable-buffer-local 'mc/mc-mode-temporarily-disabled)
 
 (defvar mc--this-command nil
   "Used to store the original command being run.")
@@ -473,13 +463,13 @@ They are temporarily disabled when multiple-cursors are active.")
 (define-minor-mode multiple-cursors-mode
   "Mode while multiple cursors are active."
   nil mc/mode-line mc/keymap
-  (setq mc/mc-mode-temporarily-disabled nil)
   (if multiple-cursors-mode
       (progn
         (mc/temporarily-disable-unsupported-minor-modes)
         (add-hook 'pre-command-hook 'mc/make-a-note-of-the-command-being-run nil t)
         (add-hook 'post-command-hook 'mc/execute-this-command-for-all-cursors t t)
         (run-hooks 'multiple-cursors-mode-enabled-hook))
+    (setq mc/mc-mode-temporarily-disabled nil)
     (remove-hook 'post-command-hook 'mc/execute-this-command-for-all-cursors t)
     (remove-hook 'pre-command-hook 'mc/make-a-note-of-the-command-being-run t)
     (setq mc--this-command nil)
