@@ -78,6 +78,8 @@ You can [watch an intro to multiple-cursors at Emacs Rocks](http://emacsrocks.co
  - `mc/insert-numbers`: Insert increasing numbers for each cursor, top to bottom.
  - `mc/sort-regions`: Sort the marked regions alphabetically.
  - `mc/reverse-regions`: Reverse the order of the marked regions.
+ - `mc/cycle-at-once` : Temporarily disables multiple cursors, but save it's state and you can cycle through the cursors 
+ - `mc/stop-cycle-at-once` : Restore normal multiple cursor behaviour
 
 ## Tips and tricks
 
@@ -107,6 +109,8 @@ You can [watch an intro to multiple-cursors at Emacs Rocks](http://emacsrocks.co
 
 - If you would like to keep the global bindings clean, and get custom keybindings
   when the region is active, you can try [region-bindings-mode](https://github.com/fgallina/region-bindings-mode).
+
+- Use `(define-key mc/keymap …)` for `mc/cycle-at-once` and `mc/stop-cycle-at-once`. Thus the bindings will only be active in multiple-cursors-mode.
 
 BTW, I highly recommend adding `mc/mark-next-like-this` to a key binding that's
 right next to the key for `er/expand-region`.
