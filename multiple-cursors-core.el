@@ -597,6 +597,8 @@ for running commands with multiple cursors.")
                                      mc/unmark-previous-like-this
                                      mc/skip-to-next-like-this
                                      mc/skip-to-previous-like-this
+				     mc/stop-cycle-at-once
+				     mc/cycle-at-once
                                      rrm/switch-to-multiple-cursors
                                      save-buffer
                                      ido-exit-minibuffer
