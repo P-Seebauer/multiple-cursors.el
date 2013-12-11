@@ -92,6 +92,7 @@
      (interactive)
      (if mc/mc-mode-temporarily-disabled
 	   (mc/cycle-forward)
+       (message "Started cycling")
        (setq mc/mc-mode-temporarily-disabled t)
        ))
 
@@ -99,6 +100,7 @@
 (defun mc/stop-cycle-at-once() 
   "Get back to normal multiple cursors behaviour"
   (interactive) 
+  (message "Cycling done")
   (setq mc/mc-mode-temporarily-disabled ()))
 
 
