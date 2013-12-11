@@ -86,5 +86,18 @@
   (setq mc--strings-to-replace (sort (mc--ordered-region-strings) 'string<))
   (mc--replace-region-strings))
 
+(define-key mc/keymap (kbd "<C-tab>") 'mc/cycle-at-once)
+(define-key mc/keymap (kbd "C-c g") 
+  '(lambda () "" (interactive) (setq mc/mc-mode-temporarily-disabled ())
+     ))
+
+(defun mc/cycle-at-once () 
+  "Cycle through through multiple cursors at once"
+     (interactive)
+     (if mc/mc-mode-temporarily-disabled
+	   (mc/cycle-forward)
+       (setq mc/mc-mode-temporarily-disabled t)
+       ))
+
 (provide 'mc-separate-operations)
 ;;; mc-separate-operations.el ends here
