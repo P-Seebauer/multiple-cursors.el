@@ -86,5 +86,27 @@
   (setq mc--strings-to-replace (sort (mc--ordered-region-strings) 'string<))
   (mc--replace-region-strings))
 
+
+;;;###autoload
+(defun mc/align-with-spaces ()
+  "aligns all cursors with whitespaces to the one with the
+highest colum number (the rightest)"
+  ;; TODO Abort when on same line
+  (let ((rightest-column (current-column)))
+    ;; Not sure if there is something like a map function for all cursors,
+    (mc/execute-command-for-all-cursors 
+     (lambda () "get the rightest cursor "
+       (setq rightest-column (max current-column rightest-column))
+       ))
+    (mc/execute-command-for-all-cursors 
+     (lambda () 
+       (save-excursion 
+	 (insert (make-string 
+		  (-rightest-column (current-column)) ? )))
+       ))
+    )
+  )
+
+
 (provide 'mc-separate-operations)
 ;;; mc-separate-operations.el ends here
