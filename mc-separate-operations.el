@@ -92,20 +92,24 @@
   "aligns all cursors with whitespaces to the one with the
 highest colum number (the rightest)"
   ;; TODO Abort when on same line
+  (interactive)
   (let ((rightest-column (current-column)))
     ;; Not sure if there is something like a map function for all cursors,
     (mc/execute-command-for-all-cursors 
      (lambda () "get the rightest cursor "
-       (setq rightest-column (max current-column rightest-column))
+       (interactive)
+       (setq rightest-column (max (current-column) rightest-column))
        ))
     (mc/execute-command-for-all-cursors 
      (lambda () 
-       (save-excursion 
-	 (insert (make-string 
-		  (-rightest-column (current-column)) ? )))
+       (interactive)
+       (let ((missing-spaces (- rightest-column (current-column))))
+	 (save-excursion (insert (make-string missing-spaces ? )))
+	 (forward-char missing-spaces)
+	 )
        ))
-    )
-  )
+    ))
+
 
 
 (provide 'mc-separate-operations)
