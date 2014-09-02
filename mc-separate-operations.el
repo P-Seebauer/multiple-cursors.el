@@ -89,26 +89,32 @@
 
 ;;;###autoload
 (defun mc/align-with-spaces ()
-  "aligns all cursors with whitespaces to the one with the
-highest colum number (the rightest)"
-  ;; TODO Abort when on same line
+  "Aligns all cursors with whitespaces to the one with the
+highest colum number (the rightest)
+Aborts if the some cursors are on the same line"
   (interactive)
-  (let ((rightest-column (current-column)))
-    ;; Not sure if there is something like a map function for all cursors,
+  (let ((rightest-column (current-column))
+	(mc/cursor-lines ())
+	(lines-are-uniq t))
     (mc/execute-command-for-all-cursors 
-     (lambda () "get the rightest cursor "
+     (lambda () "get the rightest cursor and check if the lines are uniq"
        (interactive)
-       (setq rightest-column (max (current-column) rightest-column))
-       ))
-    (mc/execute-command-for-all-cursors 
-     (lambda () 
-       (interactive)
-       (let ((missing-spaces (- rightest-column (current-column))))
-	 (save-excursion (insert (make-string missing-spaces ? )))
-	 (forward-char missing-spaces)
-	 )
-       ))
-    ))
+       (if (setq lines-are-uniq
+		 (and (not(memq (line-number-at-pos) mc/cursor-lines))
+		      lines-are-uniq))
+	   (setq rightest-column (max (current-column) rightest-column))
+	 (add-to-list 'mc/cursor-lines (line-number-at-pos))
+       )))
+    (if lines-are-uniq
+	(mc/execute-command-for-all-cursors 
+	 (lambda () 
+	   (interactive)
+	   (let ((missing-spaces (- rightest-column (current-column))))
+	     (save-excursion (insert (make-string missing-spaces ? )))
+	     (forward-char missing-spaces)
+	     )
+	   )))
+      ))
 
 
 
