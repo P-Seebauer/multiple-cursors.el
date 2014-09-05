@@ -88,11 +88,11 @@
 
 
 ;;;###autoload
-(defun mc/align-with-spaces ()
-  "Aligns all cursors with whitespaces to the one with the
+(defun mc/vertical-align (character)
+  "Aligns all cursors vertically with a given CHARACTER to the one with the
 highest colum number (the rightest)
 Aborts if the some cursors are on the same line"
-  (interactive)
+  (interactive "c"
   (let ((rightest-column (current-column))
 	(mc/cursor-lines ())
 	(lines-are-uniq t))
@@ -110,13 +110,18 @@ Aborts if the some cursors are on the same line"
 	 (lambda () 
 	   (interactive)
 	   (let ((missing-spaces (- rightest-column (current-column))))
-	     (save-excursion (insert (make-string missing-spaces ? )))
+	     (save-excursion (insert (make-string missing-spaces character)))
 	     (forward-char missing-spaces)
 	     )
 	   )))
       ))
 
-
+;;;###autoload
+(defun mc/vertical-align-with-space ()
+  "Aligns all cursors with whitespace like `mc/vertical-align' does"
+  (interactive)
+  (mc/vertical-align 32 )
+  )
 
 (provide 'mc-separate-operations)
 ;;; mc-separate-operations.el ends here
